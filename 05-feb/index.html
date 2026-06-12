@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Countdown Alert</title>
+</head>
+<body>
+<input id="num"/>
+<button onclick="count()">Click Me</button>
+<h2 id="timer"></h2>
+
+<script>
+  let time = 10+1; 
+
+  let interval = setInterval(function () {
+    time--;
+
+    document.getElementById("timer").innerText = time;
+
+    if (time === 0) {
+      clearInterval(interval); 
+      alert("Time is up!");
+    }
+  }, 1000); 
+</script>
+
+</body>
+</html>

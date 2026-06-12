@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: pink;
+        }
+
+        .login-container {
+            background: #fff;
+            padding: 40px;
+            width: 320px;
+            border-radius: 8px;
+            
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login</h2>
+
+        <div id="error" class="error-message">TRY AGAIN</div>
+        <input type="text" id="username" placeholder="Username"/>
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+    </div>
+    <script>
+    
+    const passwordField = document.getElementById("password");
+    passwordField.type = this.checked ? "text" : "password";
+
+
+function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const error = document.getElementById("error");
+
+    
+    let correctUser = "admin";
+    let correctPass = "1234";
+
+    if (user === correctUser && pass === correctPass) {
+        error.style.display = "none";
+        alert("Login successful!");
+    } else {
+        error.style.display = "block";
+    }
+}
+
+    </script>
+</body>
+</html>

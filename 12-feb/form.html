@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="signupForm">
+  <label for="password">Password:</label></br>
+  <input type="password" id="password" required minlength="8"></br>
+  <span id="passwordError"></span></br>
+
+  <label for="confirmPassword">Confirm Password:</label></br>
+  <input type="password" id="confirmPassword" required></br>
+  <span id="confirmPasswordError"></span></br>
+
+  <button type="submit">Sign Up</button></br>
+</form>
+
+<script>
+  const form = document.getElementById("signupForm");
+  const password = document.getElementById("password");
+  const confirmPassword = document.getElementById("confirmPassword");
+  const passwordError = document.getElementById("passwordError");
+  const confirmPasswordError = document.getElementById("confirmPasswordError");
+
+  form.addEventListener("submit", function(event) {
+    // Reset errors
+    passwordError.textContent = "";
+    confirmPasswordError.textContent = "";
+
+    if (!password.checkValidity()) {
+      if (password.validity.valueMissing) {
+        passwordError.textContent = "Password is required!";
+      } else if (password.validity.tooShort) {
+        passwordError.textContent = "Password must be at least 8 characters long!";
+      }
+      event.preventDefault();
+    }
+
+    if (password.value !== confirmPassword.value) {
+      confirmPasswordError.textContent = "Passwords do not match!";
+      event.preventDefault();
+    }
+  });
+
+  password.addEventListener("input", function() {
+    passwordError.textContent = "";
+    if (password.validity.tooShort) {
+      passwordError.textContent = `Password must be at least ${password.minLength} characters; you entered ${password.value.length}.`;
+    }
+  });
+
+  confirmPassword.addEventListener("input", function() {
+    confirmPasswordError.textContent = "";
+    if (confirmPassword.value !== password.value) {
+      confirmPasswordError.textContent = "Passwords do not match!";
+    }
+  });
+</script>
+</body>
+</html>

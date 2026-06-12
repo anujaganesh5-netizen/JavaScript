@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript Form Validation</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; background-color: #f7f7f7; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input[type="text"], input[type="email"], select, textarea, input[type="number"], input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; }
+    .error-message {
+      color: tomato;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    .success-message {
+      color: green;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    button {
+      background-color: dodgerblue;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .input-error { border: 2px solid tomato !important; }
+  </style>
+</head>
+<body>
+
+  <h1>User Registration</h1>
+
+  <form id="registrationForm">
+
+    <!-- Username -->
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username">
+      <span id="usernameError" class="error-message"></span>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email">
+      <span id="emailError" class="error-message"></span>
+    </div>
+
+    <!-- Country -->
+    <div class="form-group">
+      <label for="country">Country</label>
+      <select id="country">
+        <option value="">-- Select Country --</option>
+        <option value="IN">India</option>
+        <option value="US">USA</option>
+        <option value="CA">Canada</option>
+      </select>
+      <span id="countryError" class="error-message"></span>
+    </div>
+
+
+    <!-- ⭐ NEW ELEMENT #1 — Terms & Conditions Checkbox -->
+    <div class="form-group">
+      <label>Terms & Conditions</label>
+      <input type="checkbox" id="terms">
+      I accept the terms and conditions
+      <span id="termsError" class="error-message"></span>
+    </div>
+
+    <!-- ⭐ NEW ELEMENT #2 — Radio Buttons (Select One) -->
+    <div class="form-group">
+      <label>Gender</label>
+      <label><input type="radio" name="gender" value="Basic">Male</label>
+       <label><input type="radio" name="gender" value="Basic">Female</label>
+        <label><input type="radio" name="gender" value="Basic"> Other</label>
+      <span id="radioError" class="error-message"></span>
+    </div>
+
+    <!-- ⭐ NEW ELEMENT #3 — Textarea -->
+    <div class="form-group">
+      <label for="comments">Comments</label>
+      <textarea id="comments" rows="4"></textarea>
+      <span id="commentsError" class="error-message"></span>
+    </div>
+
+    <!-- ⭐ NEW ELEMENT #4 — Number Input -->
+    <div class="form-group">
+      <label for="quantity">Quantity (1–10)</label>
+      <input type="number" id="quantity" min="1" max="10">
+      <span id="quantityError" class="error-message"></span>
+    </div>
+
+    <!-- ⭐ NEW ELEMENT #5 — Date Input -->
+    <div class="form-group">
+      <label for="eventDate">Event Date (must be future)</label>
+      <input type="date" id="eventDate">
+      <span id="dateError" class="error-message"></span>
+    </div>
+
+
+    <button type="button" onclick="validateForm(event)">Register</button>
+    <p id="submitStatus" class="success-message"></p>
+
+  </form>
+
+
+<script>
+  const usernameInput = document.getElementById('username');
+  const emailInput = document.getElementById('email');
+  const countrySelect = document.getElementById('country');
+  const termsCheck = document.getElementById('terms');
+  const commentsInput = document.getElementById('comments');
+  const quantityInput = document.getElementById('quantity');
+  const dateInput = document.getElementById('eventDate');
+  const submitStatus = document.getElementById('submitStatus');
+
+  function validateForm(event) {
+    event.preventDefault();
+    resetErrors();
+    let isValid = true;
+
+    // --- Username ---
+    const username = usernameInput.value.trim();
+    if (!username) { displayError('usernameError', 'Username is required.'); isValid=false; }
+    else if (username.length < 4) { displayError('usernameError', 'Minimum 4 characters.'); isValid=false; }
+
+    // --- Email ---
+    const email = emailInput.value.trim();
+    if (!email) { displayError('emailError', 'Email required.'); isValid=false; }
+    else if (!email.includes('@')) { displayError('emailError', 'Invalid email format.'); isValid=false; }
+
+    // --- Country ---
+    if (countrySelect.value === "") {
+      displayError('countryError', 'Select a country.');
+      isValid = false;
+    }
+
+    // ⭐ Checkbox Validation
+    if (!termsCheck.checked) {
+      displayError('termsError', 'You must accept the terms.');
+      isValid = false;
+    }
+
+    // ⭐ Radio Validation
+    const radioSelected = document.querySelector('input[name="accountType"]:checked');
+    if (!radioSelected) {
+      displayError('radioError', 'Select an account type.');
+      isValid = false;
+    }
+
+    // ⭐ Textarea (min 10 characters)
+    const comments = commentsInput.value.trim();
+    if (comments.length < 10) {
+      displayError('commentsError', 'Comment must be at least 10 characters.');
+      isValid = false;
+    }
+
+    // ⭐ Number Input
+    const qty = Number(quantityInput.value);
+    if (!qty || qty < 1 || qty > 10) {
+      displayError('quantityError', 'Enter a number between 1 and 10.');
+      isValid = false;
+    }
+
+    // ⭐ Date must be in the future
+    const selectedDate = new Date(dateInput.value);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (isNaN(selectedDate) || selectedDate <= today) {
+      displayError('dateError', 'Select a future date.');
+      isValid = false;
+    }
+
+    // --- Final ---
+    if (isValid) {
+      submitStatus.textContent = "Success! All fields are valid.";
+      submitStatus.style.color = "green";
+    } else {
+      submitStatus.textContent = "Validation failed. Fix errors.";
+      submitStatus.style.color = "red";
+    }
+  }
+
+  function resetErrors() {
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    document.querySelectorAll('input, select, textarea').forEach(el => el.classList.remove('input-error'));
+    submitStatus.textContent = '';
+  }
+
+  function displayError(id, msg) {
+    document.getElementById(id).textContent = msg;
+  }
+</script>
+
+</body>
+</html>

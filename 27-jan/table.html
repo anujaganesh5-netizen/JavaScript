@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form to Table</title>
+  </head>
+  <body>
+    <form id="form">
+      <input type="text" id="name" placeholder="Enter Name" required />
+      <br/><br/>
+      <input type="number" id="age" placeholder="Enter Age" required />
+      <br/><br/>
+      <input type="text" id="skill" placeholder="Enter Skill" required />
+      <br/><br/>
+      <button type="submit">Add to Table</button>
+      <br/><br/>
+    </form>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Skill</th>
+        </tr>
+      </thead>
+
+      <tbody id="body"></tbody>
+    </table>
+    <script>
+      document
+        .getElementById("form")
+        .addEventListener("submit", function (x) {
+          x.preventDefault();
+          const name = document.getElementById("name").value;
+          const age = document.getElementById("age").value;
+          const skill = document.getElementById("skill").value;
+          const row = document.createElement("tr");
+
+          row.innerHTML = `<td>${name}</td><td>${age}</td><td>${skill}</td>`;
+          document.getElementById("body").appendChild(row);
+          document.getElementById("form").reset();
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript Form Validation</title>
+  <link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+
+
+  <h1>User Registration</h1>
+ 
+  <!-- The form element must have an ID for JavaScript to easily grab it -->
+  <form id="registrationForm">
+   
+    <!-- Username Field -->
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username">
+      <!-- Error message container for this specific field -->
+      <span id="usernameError" class="error-message"></span>
+    </div>
+   
+    <!-- Email Field -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email">
+      <span id="emailError" class="error-message"></span>
+    </div>
+   
+    <!-- Country Selector Field -->
+    <div class="form-group">
+      <label for="country">Country</label>
+      <select id="country" name="country">
+        <option value="">-- Select Country --</option>
+        <option value="IN">India</option>
+        <option value="US">USA</option>
+        <option value="CA">Canada</option>
+      </select>
+      <span id="countryError" class="error-message"></span>
+    </div>
+   
+    <!-- --- CHANGE IS HERE --- -->
+    <!-- We change type="submit" to type="button" and call the function directly -->
+    <button type="button" onclick="validateForm(event)">Register</button>
+   
+    <p id="submitStatus" class="success-message"></p>
+  </form>
+
+
+  <script>
+    // 1. Get Elements from the DOM
+    const form = document.getElementById('registrationForm');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const countrySelect = document.getElementById('country');
+    const submitStatus = document.getElementById('submitStatus');
+
+
+    // 2. Define the main validation function
+    function validateForm(event) {
+      // PREVENT DEFAULT: This is the most crucial step!
+      // It stops the form from trying to submit and refresh the page immediately.
+      // This line is still necessary, even with type="button" if the form had other submit actions.
+      event.preventDefault();
+
+
+      // resetErrors();
+     
+      let isValid = true; // Flag to track overall form validity
+
+
+      // --- VALIDATION CHECKS ---
+
+
+      // 1. Username Validation (Required and Min Length)
+      const usernameValue = usernameInput.value.trim(); // .trim() is essential!
+      if (usernameValue.length === 0) {
+        displayError('usernameError', 'Username is required.');
+   
+        isValid = false;
+      } else if (usernameValue.length < 4) {
+        displayError('usernameError', 'Username must be at least 4 characters.');
+   
+        isValid = false;
+      }
+
+
+      // 2. Email Validation (Required)
+      const emailValue = emailInput.value.trim();
+      if (emailValue.length === 0) {
+        displayError('emailError', 'Email is required.');
+   
+        isValid = false;
+      }
+      // Basic format check (using includes for simplicity)
+      else if (!emailValue.includes('@')) {
+        displayError('emailError', 'Must be a valid email address.');
+
+
+        isValid = false;
+      }
+
+
+      // 3. Country Validation (Must select a non-default option)
+      const countryValue = countrySelect.value;
+      // The default option has an empty value ("")
+      if (countryValue === "") {
+        displayError('countryError', 'Please select a country.');
+     
+        isValid = false;
+      }
+
+
+      // --- FINAL RESULT ---
+      if (isValid) {
+        // If everything is valid, display success message (In a real app, you would send data to the server here)
+        submitStatus.textContent = 'Success! Form data is valid.';
+        submitStatus.style.color = 'green';
+        // You could also run form.reset() here to clear fields
+      } else {
+        submitStatus.textContent = 'Validation failed. Please correct the errors.';
+        submitStatus.style.color = 'red';
+      }
+    }
+
+
+       // 3. Helper Functions
+
+
+    // Clears all previous error messages and styling
+    function resetErrors() {
+      // Use querySelectorAll to find all elements with the class 'error-message' and clear them
+      document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+     
+      // Use querySelectorAll to remove the red border from all inputs/selects
+      document.querySelectorAll('input, select').forEach(el => el.classList.remove('input-error'));
+     
+      submitStatus.textContent = '';
+    }
+
+
+    // Displays a specific error message
+    function displayError(elementId, message) {
+      document.getElementById(elementId).textContent = message;
+    }
+
+
+
+
+    // 4. Removed the line: form.addEventListener('submit', validateForm);
+
+
+  </script>
+
+
+</body>
+</html>
